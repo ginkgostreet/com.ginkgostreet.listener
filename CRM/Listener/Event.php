@@ -1,7 +1,9 @@
 <?php
 
 /**
- *
+ * Defines the conditions for raising an event and messages the registry to
+ * invoke listeners. Optionally, delay raising of an event by overriding
+ * $this->queueConditionsAreMet().
  */
 abstract class CRM_Listener_Event {
 
@@ -11,14 +13,42 @@ abstract class CRM_Listener_Event {
   const QUEUE_NAME = 'deferred_events';
 
   /**
-   * Messages the registry to invoke all listeners for this event.
+   * Messages the registry to invoke all listeners for this event, or queues the
+   * event to be raised later if queue conditions are met.
    */
   public function raise() {
-    CRM_Listener_Registry::invokeListeners($this);
+    if ($this->queueConditionsAreMet()) {
+      $this->queueRaise();
+    } else {
+      CRM_Listener_Registry::invokeListeners($this);
+    }
   }
 
   /**
-   * Allow event to be automatically raised by the event queue manager
+   * Events should contain the logic for the conditions under which they will be
+   * raised. Define the conditions here and call this before $this->raise, or
+   * override $this->raise and call it internally.
+   *
+   * @return boolean
+   */
+  public function raiseConditionsAreMet() {
+    return TRUE;
+  }
+
+  /**
+   * Override this to set up a condition to queue the event instead of raising it
+   * immediately.
+   *
+   * @return boolean
+   */
+  protected function queueConditionsAreMet() {
+    return FALSE;
+  }
+
+
+  /**
+   * Queue event to be automatically raised by the event queue manager at a later
+   * time
    *
    * @param int $delay_seconds Event will not be raised until at least this much time passes
    */
