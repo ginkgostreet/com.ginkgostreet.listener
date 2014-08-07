@@ -106,3 +106,26 @@ function listener_civicrm_caseTypes(&$caseTypes) {
 function listener_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _listener_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
+
+function listener_civicrm_alterTemplateFile($formName, &$form, $context, &$tplName) {
+  $params = array('name' => CRM_Listener_Event::QUEUE_NAME);
+  $queueManager = new CRM_Queue_Queue_Sql($params);
+
+  $throttle = civicrm_api3('Setting', 'getvalue', array(
+    'group_name' => 'com.ginkgostreet.listener',
+    'name' => 'queue_throttle',
+  ));
+  $max = ($throttle > $queueManager->numberOfItems()) ? $queueManager->numberOfItems() : $throttle;
+
+  for ($i = $max; $i > 0; $i--) {
+    $timeout = 3600;
+    $queueItem = $queueManager->claimItem($timeout);
+
+    if ($queueItem !== FALSE) {
+      $event = $queueItem->data;
+      CRM_Listener_Registry::invokeListeners($event);
+
+      $queueManager->deleteItem($queueItem);
+    }
+  }
+}

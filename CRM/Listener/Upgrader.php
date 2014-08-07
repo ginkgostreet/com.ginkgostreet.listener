@@ -10,9 +10,9 @@ class CRM_Listener_Upgrader extends CRM_Listener_Upgrader_Base {
 
   /**
    * Example: Run an external SQL script when the module is installed
-   *
+   */
   public function install() {
-    $this->executeSqlFile('sql/myinstall.sql');
+    CRM_Core_BAO_Setting::setItem(100, 'com.ginkgostreet.listener', 'queue_throttle');
   }
 
   /**
