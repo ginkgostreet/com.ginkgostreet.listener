@@ -1,18 +1,23 @@
 <?xml version="1.0"?>
 <extension key="com.ginkgostreet.listener" type="module">
   <file>listener</file>
-  <name>FIXME</name>
-  <description>FIXME</description>
+  <name>Persistent messaging framework for CiviCRM</name>
+  <description>
+    This is a developer tool for building extensions that use events and listeners,
+    both within a single user request and across multiple user requests. See README
+    for more information.
+  </description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>Frank J. G&#xF3;mez</author>
-    <email>frank@ginkgostreet.com</email>
+    <author>Ginkgo Street Labs</author>
+    <email>inquire@ginkgostreet.com</email>
   </maintainer>
   <releaseDate>2014-08-07</releaseDate>
-  <version>1.0</version>
+  <version>1.0-dev</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.2</ver>
+    <ver>4.4</ver>
+    <ver>4.5</ver>
   </compatibility>
   <comments>This is a new, undeveloped module</comments>
   <civix>
