@@ -108,7 +108,7 @@ class CRM_Listener_Registry {
   }
 
   private static function getNextWeight($eventClass) {
-    $optionValues = civicrm_api3('OptionValues', 'get', array(
+    $optionValues = civicrm_api3('OptionValue', 'get', array(
       'name' => $eventClass,
       'option_group_id' => self::getOptionGroupID(),
     ));
