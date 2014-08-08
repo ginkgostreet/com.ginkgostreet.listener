@@ -43,7 +43,7 @@ class CRM_Listener_Registry {
     }
 
     if (is_null($weight)) {
-      $weight = self::getNextWeight();
+      $weight = self::getNextWeight(self::class);
     }
 
     civicrm_api3('OptionValue', 'create', array(
