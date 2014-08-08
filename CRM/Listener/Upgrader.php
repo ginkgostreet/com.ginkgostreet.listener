@@ -8,18 +8,12 @@ class CRM_Listener_Upgrader extends CRM_Listener_Upgrader_Base {
   // By convention, functions that look like "function upgrade_NNNN()" are
   // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
 
-  /**
-   * Example: Run an external SQL script when the module is installed
-   */
   public function install() {
     CRM_Core_BAO_Setting::setItem(100, 'com.ginkgostreet.listener', 'queue_throttle');
   }
 
-  /**
-   * Example: Run an external SQL script when the module is uninstalled
-   *
   public function uninstall() {
-   $this->executeSqlFile('sql/myuninstall.sql');
+    // TODO: delete throttle setting
   }
 
   /**

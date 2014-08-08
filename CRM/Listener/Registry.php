@@ -27,11 +27,11 @@ class CRM_Listener_Registry {
    */
   public static function addListener($eventClass, $listenerClass, $extension, $weight = NULL) {
     if (!class_exists($eventClass)) {
-      throw new CRM_Exception("Can't register listener to nonexistent event");
+      throw new CRM_Exception("Can't register listener $listenerClass to nonexistent event $eventClass");
     }
 
     if (!class_exists($listenerClass)) {
-      throw new CRM_Exception("Can't register nonexistent listener");
+      throw new CRM_Exception("Can't register nonexistent listener $listenerClass");
     }
 
     if (!in_array('CRM_Listener', class_parents($listenerClass))) {
