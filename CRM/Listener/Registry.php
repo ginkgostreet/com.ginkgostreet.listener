@@ -56,7 +56,8 @@ class CRM_Listener_Registry {
   }
 
   public static function removeListener($listenerClass) {
-    civicrm_api3('OptionValue', 'delete', array(
+    civicrm_api('OptionValue', 'delete', array(
+      'version' => 3,
       'option_group_id' => self::getOptionGroupID(),
       'value' => $listenerClass,
     ));
@@ -82,7 +83,7 @@ class CRM_Listener_Registry {
       try {
         $listener->handle($event);
       } catch(Exception $e) {
-        CRM_Core_Error::debug_log_message($e->message);
+        CRM_Core_Error::debug_log_message($e->getMessage());
         continue;
       }
     }
