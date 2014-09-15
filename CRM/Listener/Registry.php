@@ -43,7 +43,7 @@ class CRM_Listener_Registry {
     }
 
     if (is_null($weight)) {
-      $weight = self::getNextWeight(self::class);
+      $weight = self::getNextWeight(get_called_class());
     }
 
     civicrm_api3('OptionValue', 'create', array(
@@ -64,10 +64,20 @@ class CRM_Listener_Registry {
   }
 
   public static function removeListeners($eventClass) {
-    civicrm_api3('OptionValue', 'delete', array(
+    $value_id = civicrm_api('OptionValue', 'getvalue', array(
+      'version' => 3,
       'option_group_id' => self::getOptionGroupID(),
       'name' => $eventClass,
+      'return' => 'id'
     ));
+    if (is_array($value_id)) { //getvalue failed
+      return false;
+    }
+    $api_delete = civicrm_api3('OptionValue', 'delete', array(
+      'id' => $value_id,
+    ));
+
+    return (CRM_Utils_Array::value('is_error', $api_delete) !== 1);
   }
 
   /**
