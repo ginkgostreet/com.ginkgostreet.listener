@@ -55,29 +55,36 @@ class CRM_Listener_Registry {
     ));
   }
 
-  public static function removeListener($listenerClass) {
-    civicrm_api('OptionValue', 'delete', array(
+  /**
+   * Delete a listener by the registry ID (OptionValue ID)
+   * @param int $id
+   */
+  public static function removeListener($id) {
+    return civicrm_api('OptionValue', 'delete', array(
       'version' => 3,
       'option_group_id' => self::getOptionGroupID(),
-      'value' => $listenerClass,
+      'id' => $id,
     ));
   }
 
+  /**
+   * Delete all listeners for the Event (class name)
+   *
+   * @param string $eventClass
+   */
   public static function removeListeners($eventClass) {
-    $value_id = civicrm_api('OptionValue', 'getvalue', array(
+    $listeners = civicrm_api('OptionValue', 'get', array(
       'version' => 3,
       'option_group_id' => self::getOptionGroupID(),
       'name' => $eventClass,
       'return' => 'id'
     ));
-    if (is_array($value_id)) { //getvalue failed
-      return false;
+    
+    if (!CRM_Utils_Array::value('is_error', $listeners)) {
+      foreach ($listeners['values'] as $listener) {
+        self::removeListener($listener['id']);
+      }
     }
-    $api_delete = civicrm_api3('OptionValue', 'delete', array(
-      'id' => $value_id,
-    ));
-
-    return (CRM_Utils_Array::value('is_error', $api_delete) !== 1);
   }
 
   /**
