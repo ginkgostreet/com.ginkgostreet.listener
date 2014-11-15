@@ -8,14 +8,14 @@
 abstract class CRM_Listener_Event {
 
   /**
-   * Returned when an event was fired.
+   * Returned when an event was queued.
    */
   const EVENT_WAS_QUEUED = 1;
 
   /**
-   * Returned when an event was queued.
+   * Returned when an event was raised.
    */
-  const EVENT_WAS_FIRED = 2;
+  const EVENT_WAS_RAISED = 2;
 
   /**
    * The key for the civicmr_queue_item table
@@ -27,7 +27,7 @@ abstract class CRM_Listener_Event {
    * event to be raised later if queue conditions are met.
    *
    * @return int Returns a constant to indicate whether the event was fired or
-   *             queued: self::EVENT_WAS_QUEUED || self::EVENT_WAS_FIRED
+   *             queued: self::EVENT_WAS_QUEUED || self::EVENT_WAS_RAISED
    */
   public function raise() {
     if ($this->queueConditionsAreMet()) {
@@ -35,7 +35,7 @@ abstract class CRM_Listener_Event {
       return self::EVENT_WAS_QUEUED;
     } else {
       CRM_Listener_Registry::invokeListeners($this);
-      return self::EVENT_WAS_FIRED;
+      return self::EVENT_WAS_RAISED;
     }
   }
 
