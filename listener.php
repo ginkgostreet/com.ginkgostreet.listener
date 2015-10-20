@@ -112,7 +112,7 @@ function listener_civicrm_alterTemplateFile($formName, &$form, $context, &$tplNa
   $queueManager = new CRM_Queue_Queue_Sql($params);
 
   $throttle = civicrm_api3('Setting', 'getvalue', array(
-    'group_name' => 'com.ginkgostreet.listener',
+    'group' => 'com.ginkgostreet.listener',
     'name' => 'queue_throttle',
   ));
   $max = ($throttle > $queueManager->numberOfItems()) ? $queueManager->numberOfItems() : $throttle;
